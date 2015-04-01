@@ -1,3 +1,8 @@
 <tr>
   <td><%= poster.post %></td>
+  <td class = "text-right">
+    <span class="post-<%=poster.id%>"><%= poster.counter %></span>
+    <%= link_to "Like", upvote_path(poster), :remote => true, class: "btn btn-success" %>
+    <%#= link_to "Unlike", root_path(poster), :remote => true, class: "btn btn-info" %>
+  </td>
 </tr>

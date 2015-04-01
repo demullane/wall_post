@@ -1,13 +1,13 @@
 class HomeController < ApplicationController
-  #respond_to :html, :js
 
   def index
-    @wall_posts = Poster.all
+    @wall_posts = Poster.all.order(:counter).reverse
     @wall_post = Poster.new
   end
 
   def create
     @wall_post = Poster.new(wall_post_params)
+    @wall_post.counter = 0
 
     respond_to do |format|
       if @wall_post.save
@@ -18,6 +18,17 @@ class HomeController < ApplicationController
         format.html { render action: "new"}
         format.json { render json: @wall_post.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def upvote
+    @wall_post = Poster.find(params[:id])
+    @wall_post.counter += 1
+    @wall_post.save
+
+    respond_to do |format|
+      format.js {}
+      format.json {render json: @wall_post, status: :created, location: @wall_post}
     end
   end
 
